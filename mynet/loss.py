@@ -14,12 +14,12 @@ class Loss:
         """Calculate the gradient of the loss function."""
         raise NotImplementedError
     
-class TSELoss:
-    """Total squared error loss."""
+class MSELoss:
+    """Mean squared error loss."""
     def loss(self, predicted: Tensor, actual: Tensor) -> float:
         """Calculate the loss."""
-        return np.sum((predicted - actual) ** 2)
+        return np.sum((predicted - actual) ** 2) / (2 * actual.size)
 
     def grad(self, predicted: Tensor, actual: Tensor) -> Tensor:
         """Calculate the gradient of the loss function."""
-        return 2 * (predicted - actual)
+        return (predicted - actual) /  actual.size
