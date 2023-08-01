@@ -29,14 +29,14 @@ class Linear(Layer):
 
     def forward(self, inputs: Tensor) -> Tensor:
         self.inputs = inputs
-        return  input @ self.params["w"]+ self.params["b"]
+        return  inputs @ self.params["w"] + self.params["b"]
     
     def background(self, grad: Tensor) -> Tensor:
         """if y = f(x) and x = w @ inputs + b:
              """
         self.grads["w"] =  self.inputs.T @ grad # input dim : batch * input_size; W dim : in*out
         self.grads["b"] = np.sum(grad, axis=0) #output dim : batch * out, grad : batch * out
-        return grad * self.params["w"].T
+        return grad @ self.params["w"].T
 
 F = Callable[[Tensor], Tensor]
 
