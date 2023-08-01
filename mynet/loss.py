@@ -14,7 +14,7 @@ class Loss:
         """Calculate the gradient of the loss function."""
         raise NotImplementedError
     
-class MSELoss:
+class MSELoss(Loss):
     """Mean squared error loss."""
     def loss(self, predicted: Tensor, actual: Tensor) -> float:
         """Calculate the loss."""

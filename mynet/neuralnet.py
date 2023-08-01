@@ -3,6 +3,8 @@
 from typing import Sequence, Iterator, Tuple
 
 from mynet.layers import Layer
+from mynet.loss import Loss, MSELoss
+from mynet.optimizers import Optimizer, SGD
 from mynet.tensor import Tensor
 
 class NeuralNet:
@@ -27,3 +29,10 @@ class NeuralNet:
             for name, param in layer.params.items():
                 grad = layer.grads[name]
                 yield param, grad
+
+    def train(self,
+              loss: Loss = MSELoss(),
+              optimizer: Optimizer= SGD()
+              )-> None:
+        """Train the network with training data."""
+        pass
