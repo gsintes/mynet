@@ -43,6 +43,7 @@ F = Callable[[Tensor], Tensor]
 class ActivationLayer(Layer):
     """An activation layer applies directly a function element_wise to the inputs and backpropagate the gradients."""
     def __init__(self, f: F, f_prime: F) -> None:
+        super().__init__()
         self.f = f 
         self.f_prime = f_prime
 
