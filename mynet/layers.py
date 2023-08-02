@@ -54,7 +54,7 @@ class ActivationLayer(Layer):
     def background(self, grad: Tensor) -> Tensor:
         return self.f_prime(self.inputs) * grad
     
-def tanh(x:Tensor) -> Tensor:
+def tanh(x: Tensor) -> Tensor:
     """Just the hyperbolic tangent."""
     return np.tanh(x)
 
@@ -66,3 +66,15 @@ def tanh_prime(x: Tensor) -> Tensor:
 class TanhActivation(ActivationLayer):
     def __init__(self) -> None:
         super().__init__(tanh, tanh_prime)
+
+def sigmoid(x: Tensor) -> Tensor:
+    """Sigmoid function."""
+    return (1 / (1 + np.exp(-x)))
+
+def sigmoid_prime(x: Tensor) -> Tensor:
+    """The derivative of the sigmoid."""
+    return sigmoid(x) * (1 - sigmoid(x))
+
+class SigmoidActivation(ActivationLayer):
+    def __init__(self) -> None:
+        super().__init__(sigmoid, sigmoid_prime)
