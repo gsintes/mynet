@@ -6,7 +6,7 @@ import numpy as np
 
 from mynet.tensor import Tensor
 from mynet.neuralnet import NeuralNet
-from mynet.layers import Linear, TanhActivation
+from mynet.layers import Linear, TanhActivation, SigmoidActivation
 from mynet.train import train
 
 def encode_fizzbuzz(k: int) -> Tensor:

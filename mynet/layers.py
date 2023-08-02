@@ -1,7 +1,7 @@
 """Layers propagate input forward and gradients backgrounds."""
 
 from typing import Dict, Callable
-
+import abc
 import numpy as np
 
 from mynet.tensor import Tensor
@@ -54,27 +54,55 @@ class ActivationLayer(Layer):
     def background(self, grad: Tensor) -> Tensor:
         return self.f_prime(self.inputs) * grad
     
-def tanh(x: Tensor) -> Tensor:
-    """Just the hyperbolic tangent."""
-    return np.tanh(x)
-
-def tanh_prime(x: Tensor) -> Tensor:
-    """Calculate the derivative of the hyperbolic tangent."""
-    y = tanh(x)
-    return 1 - y ** 2
 
 class TanhActivation(ActivationLayer):
+    """Hyperbolic tangent activation layer."""
+    @staticmethod
+    def tanh(x: Tensor) -> Tensor:
+        """Just the hyperbolic tangent."""
+        return np.tanh(x)
+    
+    @staticmethod
+    def tanh_prime(x: Tensor) -> Tensor:
+        """Calculate the derivative of the hyperbolic tangent."""
+        y = TanhActivation.tanh(x)
+        return 1 - y ** 2
+
     def __init__(self) -> None:
-        super().__init__(tanh, tanh_prime)
+        super().__init__(TanhActivation.tanh, TanhActivation.tanh_prime)
 
-def sigmoid(x: Tensor) -> Tensor:
-    """Sigmoid function."""
-    return (1 / (1 + np.exp(-x)))
-
-def sigmoid_prime(x: Tensor) -> Tensor:
-    """The derivative of the sigmoid."""
-    return sigmoid(x) * (1 - sigmoid(x))
 
 class SigmoidActivation(ActivationLayer):
+    """Sigmoid activation layer."""
+    @staticmethod
+    def sigmoid(x: Tensor) -> Tensor:
+        """Sigmoid function."""
+        return (1 / (1 + np.exp(-x)))
+    
+    @staticmethod
+    def sigmoid_prime(x: Tensor) -> Tensor:
+        """The derivative of the sigmoid."""
+        return SigmoidActivation.sigmoid(x) * (1 - SigmoidActivation.sigmoid(x))
+    
     def __init__(self) -> None:
-        super().__init__(sigmoid, sigmoid_prime)
+        super().__init__(SigmoidActivation.sigmoid, SigmoidActivation.sigmoid_prime)
+
+class ReLUActivation(ActivationLayer):
+    """Rectified Linear Unit activation layer."""
+    @staticmethod
+    def reLU(x: Tensor) -> Tensor:
+        """Rectified Linear Unit."""
+        return np.maximum(np.zeros(x.shape), x)
+    
+    @staticmethod
+    def reLU_prime(x: Tensor) -> Tensor:
+        """ReLU derivative."""
+        derivative = np.zeros(x.shape)
+        for i in range(x.shape[0]):
+            for j in range(x.shape[1]):
+                if x[i, j] >= 0:
+                    derivative[i, j] = 1
+        return derivative
+    
+    def  __init__(self) -> None:
+        super().__init__(ReLUActivation.reLU, ReLUActivation.reLU_prime)
